@@ -48,13 +48,14 @@ function parseArguments(value = '') {
   return args;
 }
 
-function launchDetached(command, args, label) {
+function launchDetached(command, args, label, workingDirectory) {
   return new Promise((resolve, reject) => {
     let settled = false;
     const child = spawn(command, args, {
       detached: true,
       stdio: 'ignore',
-      shell: false
+      shell: false,
+      ...(workingDirectory ? { cwd: workingDirectory } : {})
     });
 
     child.once('error', error => {
@@ -87,7 +88,12 @@ class OpenLinuxAppExtension extends Extension {
         color: '#2980b9',
         input: [
           {
-            label: 'Application or executable path',
+            label: 'Application folder (working directory)',
+            ref: 'workingDirectory',
+            type: InputTypes.text
+          },
+          {
+            label: 'Executable path',
             ref: 'target',
             type: InputTypes.text
           },
@@ -135,7 +141,8 @@ class OpenLinuxAppExtension extends Extension {
       }
 
       const args = parseArguments(values.arguments || '');
-      await launchDetached(requestedTarget, args, requestedTarget);
+      const workingDirectory = String(values.workingDirectory || '').trim();
+      await launchDetached(requestedTarget, args, requestedTarget, workingDirectory || undefined);
     } catch (error) {
       const reason = String(error?.message || error);
       log.error('Failed to launch target:', requestedTarget, reason);
