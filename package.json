@@ -1,0 +1,19 @@
+{
+  "name": "riquer777-openlinuxapp",
+  "version": "1.0.0",
+  "description": "Launch Linux applications, commands, files, folders, and URLs from Deckboard",
+  "main": "index.js",
+  "scripts": {
+    "check": "node --check index.js",
+    "build": "deckboard-kit --build",
+    "install:deckboard": "deckboard-kit --install"
+  },
+  "author": "Riquer777",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "deckboard-kit": "^1.0.0"
+  }
+}
