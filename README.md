@@ -57,7 +57,10 @@ Or copy the package manually to Deckboard's extensions directory, then restart D
 
 ### Run Linux Application
 
-- **Application or executable path:** for example `/usr/bin/steam`, `steam`, or `/home/user/Applications/MyApp.AppImage`.
+The application folder and executable are separate fields. Set the folder to the directory containing the application's resources/dependencies, and set the executable field to the actual binary. The folder field is optional; if left empty, Deckboard's current working directory is inherited.
+
+- **Application folder (working directory):** directory the application expects as its current folder, for example `/opt/MyApp` or `/home/user/Games/MyGame`. This is passed as the process working directory (`cwd`).
+- **Executable path:** full path to the executable, for example `/opt/MyApp/my-app` or `/usr/bin/steam`.
 - **Arguments (optional):** for example `-silent` or `--profile "Work Profile"`.
 
 ### Open Link, File, or Folder
