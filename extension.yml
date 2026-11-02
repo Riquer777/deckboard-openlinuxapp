@@ -1,0 +1,7 @@
+name: Open Linux App
+package: riquer777-openlinuxapp
+version: 1.0.0
+description: "Launch Linux applications, commands, files, folders, and URLs from Deckboard"
+author: Riquer777
+license: MIT
+repository: "https://github.com/Riquer777/deckboard-openlinuxapp"
