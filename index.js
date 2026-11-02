@@ -80,14 +80,14 @@ class OpenLinuxAppExtension extends Extension {
     this.platforms = [Platforms.linux];
     this.inputs = [
       {
-        label: 'Open Linux App',
+        label: 'Run Linux Application',
         value: 'open-linux-app',
         icon: 'rocket',
         fontIcon: 'fas',
         color: '#2980b9',
         input: [
           {
-            label: 'Application, Command, File, Folder, or URL',
+            label: 'Application or executable path',
             ref: 'target',
             type: InputTypes.text
           },
@@ -95,34 +95,46 @@ class OpenLinuxAppExtension extends Extension {
             label: 'Arguments (optional)',
             ref: 'arguments',
             type: InputTypes.text
-          },
+          }
+        ]
+      },
+      {
+        label: 'Open Link, File, or Folder',
+        value: 'open-linux-target',
+        icon: 'external-link-alt',
+        fontIcon: 'fas',
+        color: '#16a085',
+        input: [
           {
-            label: 'Open with xdg-open',
-            ref: 'useXdgOpen',
-            type: InputTypes.checkbox,
-            default: false
+            label: 'URL or file/folder path',
+            ref: 'openTarget',
+            type: InputTypes.text
           }
         ]
       }
     ];
   }
 
-  async execute(action, { target, arguments: argumentString = '', useXdgOpen = false } = {}) {
-    if (action !== 'open-linux-app') return;
+  async execute(action, values = {}) {
+    const isOpenTarget = action === 'open-linux-target';
+    if (action !== 'open-linux-app' && !isOpenTarget) return;
 
-    const requestedTarget = String(target || '').trim();
+    const requestedTarget = String(
+      isOpenTarget ? values.openTarget || '' : values.target || ''
+    ).trim();
+
     if (!requestedTarget) {
-      log.warn('No application or target was specified.');
+      log.warn('No target was specified.');
       return;
     }
 
     try {
-      if (useXdgOpen) {
+      if (isOpenTarget) {
         await launchDetached('/usr/bin/xdg-open', [requestedTarget], requestedTarget);
         return;
       }
 
-      const args = parseArguments(argumentString);
+      const args = parseArguments(values.arguments || '');
       await launchDetached(requestedTarget, args, requestedTarget);
     } catch (error) {
       const reason = String(error?.message || error);
